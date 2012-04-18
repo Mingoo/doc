@@ -1,0 +1,29 @@
+
+    /**
+     * 为程序创建桌面快捷方式
+     */
+    private void addShortcut() {
+
+        final Intent shortcut = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
+
+        // 快捷方式的名称
+        shortcut.putExtra(Intent.EXTRA_SHORTCUT_NAME, getString(R.string.app_name));
+        // shortcut.putExtra("duplicate", false); // 不允许重复创建
+
+        // 指定当前的Activity为快捷方式启动的对象: 如 com.everest.video.VideoPlayer
+        // 注意: ComponentName的第二个参数必须加上点号(.)，否则快捷方式无法启动相应程序
+        // final ComponentName comp = new ComponentName(this.getPackageName(),
+        // ".HomeActivity");.setComponent(comp)
+        Intent shortcutLaunchIntent = new Intent(Intent.ACTION_MAIN);
+        shortcutLaunchIntent.setClass(this, HomeActivity.class);//this is more general
+        shortcutLaunchIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        shortcutLaunchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        shortcutLaunchIntent.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+        shortcut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutLaunchIntent);
+        // 快捷方式的图标
+        final ShortcutIconResource iconRes = Intent.ShortcutIconResource.fromContext(this,
+                R.drawable.icon);
+        shortcut.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconRes);
+
+        sendBroadcast(shortcut);
+    }
